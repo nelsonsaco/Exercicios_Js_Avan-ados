@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Jogo da Memória</title>
+<style>
+  body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
+  #tabuleiro { display: grid; grid-template-columns: repeat(4, 80px); grid-gap: 10px; }
+  .carta { width: 80px; height: 80px; background: #444; color: #fff; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; }
+  .virada { background: #fff; color: #000; }
+  #info { margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h2>Jogo da Memória</h2>
+<div id="tabuleiro"></div>
+<div id="info">Tentativas restantes: <span id="tentativas">10</span></div>
+
+<script>
+const letras = ["A","A","B","B","C","C","D","D"];
+let cartas = letras.sort(() => Math.random() - 0.5);
+let tentativas = 10;
+let primeiraCarta = null;
+let segundaCarta = null;
+let bloqueio = false;
+
+const tabuleiro = document.getElementById('tabuleiro');
+const tentativasSpan = document.getElementById('tentativas');
+
+cartas.forEach((valor, idx) => {
+  const div = document.createElement('div');
+  div.classList.add('carta');
+  div.dataset.valor = valor;
+  div.dataset.idx = idx;
+  div.textContent = '';
+  div.addEventListener('click', virarCarta);
+  tabuleiro.appendChild(div);
+});
+
+function virarCarta(e) {
+  if (bloqueio) return;
+  const carta = e.target;
+  if (carta.classList.contains('virada')) return;
+
+  carta.classList.add('virada');
+  carta.textContent = carta.dataset.valor;
+
+  if (!primeiraCarta) {
+    primeiraCarta = carta;
+  } else {
+    segundaCarta = carta;
+    bloqueio = true;
+    if (primeiraCarta.dataset.valor === segundaCarta.dataset.valor) {
+      primeiraCarta = null;
+      segundaCarta = null;
+      bloqueio = false;
+    } else {
+      tentativas--;
+      tentativasSpan.textContent = tentativas;
+      setTimeout(() => {
+        primeiraCarta.classList.remove('virada');
+        primeiraCarta.textContent = '';
+        segundaCarta.classList.remove('virada');
+        segundaCarta.textContent = '';
+        primeiraCarta = null;
+        segundaCarta = null;
+        bloqueio = false;
+        if (tentativas <= 0) alert("Fim de jogo!");
+      }, 1000);
+    }
+  }
+}
+</script>
+
+</body>
+</html>

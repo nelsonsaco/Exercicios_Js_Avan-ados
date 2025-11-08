@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Mini Ranking</title>
+<style>
+  body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
+  h2 { margin-bottom: 20px; }
+  input, button { margin: 5px; padding: 5px; }
+  ul { list-style: none; padding: 0; margin-top: 20px; }
+  li { background: #eee; padding: 10px 20px; margin: 5px 0; border-radius: 5px; width: 250px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h2>Mini Ranking</h2>
+<input type="text" id="nome" placeholder="Nome do jogador">
+<input type="number" id="pontos" placeholder="Pontos">
+<button id="adicionar">Adicionar jogador</button>
+
+<ul id="ranking"></ul>
+
+<script>
+let jogadores = [];
+
+const nomeInput = document.getElementById('nome');
+const pontosInput = document.getElementById('pontos');
+const ranking = document.getElementById('ranking');
+const botao = document.getElementById('adicionar');
+
+botao.addEventListener('click', function() {
+  const nome = nomeInput.value.trim();
+  const pontos = parseInt(pontosInput.value);
+
+  if (!nome || isNaN(pontos)) {
+    alert("Preencha nome e pontos corretamente!");
+    return;
+  }
+
+  jogadores.push({ nome, pontos });
+  atualizarRanking();
+  nomeInput.value = "";
+  pontosInput.value = "";
+});
+
+function atualizarRanking() {
+  jogadores.sort((a,b) => b.pontos - a.pontos);
+  ranking.innerHTML = "";
+  jogadores.forEach((j, idx) => {
+    const li = document.createElement('li');
+    li.textContent = (idx+1) + "º " + j.nome + " - " + j.pontos + " pontos";
+    ranking.appendChild(li);
+  });
+}
+</script>
+
+</body>
+</html>

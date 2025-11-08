@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Modo Escuro</title>
+<style>
+  body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; transition: background 0.3s, color 0.3s; }
+  .claro { background: #fff; color: #000; }
+  .escuro { background: #222; color: #fff; }
+  button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-top: 20px; }
+</style>
+</head>
+<body>
+<h2>Modo Escuro / Claro</h2>
+<button id="toggle">Alternar Tema</button>
+
+<script>
+const body = document.body;
+const botao = document.getElementById('toggle');
+
+// Verifica preferência salva
+const temaSalvo = localStorage.getItem('tema');
+if (temaSalvo) {
+  body.classList.add(temaSalvo);
+} else {
+  body.classList.add('claro'); // tema padrão
+}
+
+botao.addEventListener('click', () => {
+  if (body.classList.contains('claro')) {
+    body.classList.remove('claro');
+    body.classList.add('escuro');
+    localStorage.setItem('tema', 'escuro');
+  } else {
+    body.classList.remove('escuro');
+    body.classList.add('claro');
+    localStorage.setItem('tema', 'claro');
+  }
+});
+</script>
+</body>
+</html>

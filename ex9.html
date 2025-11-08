@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Validação Assíncrona + Cadastro</title>
+<style>
+  body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
+  input, button { padding: 5px; margin: 5px; }
+  #mensagem { margin-top: 10px; font-weight: bold; }
+  #usuarios { margin-top: 20px; }
+  li { margin: 3px 0; }
+</style>
+</head>
+<body>
+
+<h2>Cadastro de Usuários</h2>
+<input type="text" id="username" placeholder="Digite seu username">
+<button id="adicionar">Adicionar</button>
+<div id="mensagem"></div>
+
+<ul id="usuarios"></ul>
+
+<script>
+let existentes = [];
+const input = document.getElementById('username');
+const msg = document.getElementById('mensagem');
+const lista = document.getElementById('usuarios');
+const botao = document.getElementById('adicionar');
+let timeoutId;
+
+function atualizarLista() {
+  lista.innerHTML = "";
+  existentes.forEach(u => {
+    const li = document.createElement('li');
+    li.textContent = u;
+    lista.appendChild(li);
+  });
+}
+
+input.addEventListener('input', () => {
+  msg.textContent = "";
+  clearTimeout(timeoutId);
+
+  timeoutId = setTimeout(() => {
+    const valor = input.value.trim().toLowerCase();
+    if (valor === "") return;
+
+    if (existentes.includes(valor)) {
+      msg.textContent = "Nome já em uso";
+      msg.style.color = "red";
+    } else {
+      msg.textContent = "Nome disponível";
+      msg.style.color = "green";
+    }
+  }, 2000);
+});
+
+botao.addEventListener('click', () => {
+  const valor = input.value.trim().toLowerCase();
+  if (valor === "") return;
+
+  if (existentes.includes(valor)) {
+    alert("Não é possível adicionar, nome já em uso!");
+  } else {
+    existentes.push(valor);
+    atualizarLista();
+    msg.textContent = "Usuário adicionado!";
+    msg.style.color = "green";
+    input.value = "";
+  }
+});
+
+// Inicializa lista com nomes existentes
+atualizarLista();
+</script>
+
+</body>
+</html>
